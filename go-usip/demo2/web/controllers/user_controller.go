@@ -113,8 +113,13 @@ func (c *UserController) PostLogin() mvc.Result {
 	u, found := c.Service.GetByUsernameAndPassword(username, password)
 
 	if !found {
-		return mvc.Response{
-			Path: "/user/register",
+		return mvc.View{
+			Name: "user/login.html",
+			Data: iris.Map{
+				"Title":    "User Login",
+				"Error":    "Invalid username or password",
+				"Username": username,
+			},
 		}
 	}
 

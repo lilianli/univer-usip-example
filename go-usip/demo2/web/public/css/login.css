@@ -32,6 +32,17 @@ body:has(.register-page) {
   text-align: center;
 }
 
+.login-error {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 14px;
+  text-align: center;
+}
+
 .login-card label,
 .register-card label {
   display: block;

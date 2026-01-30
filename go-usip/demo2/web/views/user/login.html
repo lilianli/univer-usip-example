@@ -1,9 +1,12 @@
 <div class="login-page">
     <div class="login-card">
         <h1>Login</h1>
+        {{if .Error}}
+        <div class="login-error">{{.Error}}</div>
+        {{end}}
         <form action="/user/login" method="POST">
             <label for="username">Username</label>
-            <input type="text" id="username" placeholder="Enter Username" name="username" required>
+            <input type="text" id="username" placeholder="Enter Username" name="username" value="{{.Username}}" required>
 
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter Password" name="password" required>
