@@ -44,6 +44,7 @@
     {{ else if (eq .UnitType 2) }}
     <a href="{{$.SheetHost}}/?unit={{.UnitId}}&type=2">{{.Name}}.xlsx</a>
     {{ end }}
+    <label>{{.UpdatedAt}}</label>
     <a href="/file/export?fileId={{.ID}}" style="margin: 0 10px;">export</a>
     <button style="width: 70px; position: absolute; padding: 0px 20px; height: 20px; margin: 0;" onclick="showDialog(event)" fileId="{{.ID}}">Invite</button>
   </p>
@@ -89,7 +90,7 @@
     let formData = new FormData();
     formData.append('file', file);
     formData.append('size', file.size);
-    let type = file.name.split('.')[1].toLowerCase();
+    let type = file.name.split('.').pop().toLowerCase();
     switch (type) {
       case 'doc':
         formData.append('type', 'doc');

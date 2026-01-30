@@ -1,8 +1,8 @@
 host: http://localhost:8080
 
 database:
-  driver: postgresql
-  dsn: user=postgres password=postgres dbname=demo host=127.0.0.1 port=5432 sslmode=disable TimeZone=Asia/Shanghai
+  driver: sqlite
+  dsn: demo.db
 
 redis:
   addr: 127.0.0.1:6379

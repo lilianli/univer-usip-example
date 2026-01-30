@@ -22,6 +22,7 @@ type FileService interface {
 	Import(req ImportReq) (datamodels.File, error)
 	Export(req ExportReq) (resp ExportResp, err error)
 	Join(req JoinReq) error
+	UpdateEditTime(unitId string, editTimeUnixMs int64) error
 
 	BatchDelete(userId string, fileIds []uint) error
 }
@@ -300,4 +301,15 @@ func (s *fileService) CheckPermission(req CheckPermissionReq) bool {
 	}
 
 	return false
+}
+
+func (s *fileService) UpdateEditTime(unitId string, editTimeUnixMs int64) error {
+	file, found := s.repo.GetByUnitId(unitId)
+	if !found {
+		return errors.New("file not found")
+	}
+
+	return s.repo.Update(file.ID, map[string]interface{}{
+		"updated_at": time.UnixMilli(editTimeUnixMs),
+	})
 }

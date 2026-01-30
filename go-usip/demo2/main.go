@@ -109,6 +109,10 @@ func main() {
 	)
 	usip.Handle(new(controllers.UsipController))
 
+	cors := mvc.New(app.Party("/cors"))
+	cors.Register(sessManager.Start)
+	cors.Handle(new(controllers.CorsController))
+
 	app.Handle("GET", "/", func(ctx iris.Context) {
 		ctx.Redirect("/file/list", iris.StatusFound)
 	})

@@ -13,6 +13,7 @@ type FileRepository interface {
 	BatchGet(ids []uint) (files []datamodels.File, found bool)
 
 	Create(file datamodels.File) (datamodels.File, error)
+	Update(id uint, data map[string]interface{}) error
 
 	BatchDelete(ids []uint) error
 }
@@ -61,4 +62,8 @@ func (r *fileRepository) Create(file datamodels.File) (datamodels.File, error) {
 
 func (r *fileRepository) BatchDelete(ids []uint) error {
 	return r.db.Where("id IN ?", ids).Delete(&datamodels.File{}).Error
+}
+
+func (r *fileRepository) Update(id uint, data map[string]interface{}) error {
+	return r.db.Model(&datamodels.File{}).Where("id = ?", id).Updates(data).Error
 }

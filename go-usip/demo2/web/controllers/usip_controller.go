@@ -109,9 +109,9 @@ func (c *UsipController) GetRole() mvc.Result {
 
 	collaborators, found := c.FileService.GetCollaboratorsByUnitId(unitId)
 	if !found {
-		return mvc.Response{
-			Code: iris.StatusNotFound,
-		}
+		c.Ctx.StatusCode(iris.StatusNotFound)
+		c.Ctx.JSON(UsipGetRoleResp{})
+		return nil
 	}
 
 	for _, v := range collaborators {
@@ -125,9 +125,9 @@ func (c *UsipController) GetRole() mvc.Result {
 		}
 	}
 
-	return mvc.Response{
-		Code: iris.StatusNotFound,
-	}
+	c.Ctx.StatusCode(iris.StatusNotFound)
+	c.Ctx.JSON(UsipGetRoleResp{})
+	return nil
 }
 
 type UsipSubject struct {
@@ -191,5 +191,31 @@ func (c *UsipController) PostCollaborators() mvc.Result {
 	}
 
 	c.Ctx.JSON(resp)
+	return nil
+}
+
+type UsipUpdateEditTimeReq struct {
+	UnitID         string `json:"unitID"`
+	EditTimeUnixMs int64  `json:"editTimeUnixMs"`
+}
+
+func (c *UsipController) PostUnitedittime() mvc.Result {
+	var req UsipUpdateEditTimeReq
+	if err := c.Ctx.ReadJSON(&req); err != nil {
+		return mvc.Response{
+			Code: iris.StatusBadRequest,
+			Text: err.Error(),
+		}
+	}
+
+	err := c.FileService.UpdateEditTime(req.UnitID, req.EditTimeUnixMs)
+	if err != nil {
+		return mvc.Response{
+			Code: iris.StatusInternalServerError,
+			Text: err.Error(),
+		}
+	}
+
+	c.Ctx.StatusCode(iris.StatusOK)
 	return nil
 }
