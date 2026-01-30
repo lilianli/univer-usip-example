@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>File List - Style Preview</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .page-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        /* Header - action buttons */
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .btn-primary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #2563eb;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        .btn-secondary {
+            padding: 10px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            color: #374151;
+        }
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+        /* File list header */
+        .file-list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin-bottom: 16px;
+        }
+        .file-list-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .btn-logout {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #fef3c7;
+            color: #b45309;
+            transition: all 0.2s ease;
+        }
+        .btn-logout:hover {
+            background: #fde68a;
+        }
+        /* File list card */
+        .file-list-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .file-list-toolbar {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .btn-danger {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #fee2e2;
+            color: #dc2626;
+            transition: all 0.2s ease;
+        }
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+        /* File items */
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .file-item:last-child { border-bottom: none; }
+        .file-item:hover {
+            background: #f9fafb;
+        }
+        .file-item input.fileCheckbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #2563eb;
+        }
+        .file-item .file-name {
+            flex: 1;
+            min-width: 0;
+            font-weight: 500;
+            color: #2563eb;
+            text-decoration: none;
+        }
+        .file-item .file-name:hover {
+            text-decoration: underline;
+        }
+        .file-item .file-date {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .file-item .file-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .file-item .link-export {
+            font-size: 13px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+        .file-item .link-export:hover {
+            color: #2563eb;
+        }
+        .btn-invite {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            background: #e0e7ff;
+            color: #4338ca;
+            transition: all 0.2s ease;
+        }
+        .btn-invite:hover {
+            background: #c7d2fe;
+        }
+        /* New file form */
+        #div-form {
+            margin-bottom: 24px;
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        #div-form form label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+        #div-form form input[type=text] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        #div-form form input[type=text]:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        #div-form .form-type-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        #div-form .form-type-group label {
+            display: inline;
+            margin-left: 4px;
+            font-weight: normal;
+        }
+        #div-form .form-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        #form-new-btn { flex: 0 0 auto; }
+        #form-cancel-btn {
+            background: #f3f4f6 !important;
+            color: #6b7280 !important;
+        }
+        /* Dialog */
+        #dialog {
+            border: none;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        #dialog::backdrop {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        #dialog-msg > div {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        #dialog-msg > div:hover {
+            background: #f9fafb;
+        }
+        #dialog hr {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 16px 0;
+        }
+        #select-role {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            margin-right: 12px;
+            font-size: 14px;
+        }
+        #dialog-ok-btn { margin-right: 8px; }
+        #dialog-cancel-btn {
+            background: #f3f4f6 !important;
+            color: #6b7280 !important;
+        }
+    </style>
+</head>
+<body>
+<div id="list-page" class="page-container">
+
+<div class="header-actions">
+  <button id="new-btn" class="btn-primary">+ New File</button>
+  <button id="import-btn" class="btn-secondary">Import File</button>
+</div>
+
+<input type="file" id="file" style="display: none;"/>
+
+<div id="div-form" style="display: none;">
+  <form id="form" action="" method="post" enctype="multipart/form-data">
+    <label><b>Name</b></label>
+    <input type="text" placeholder="Enter file name" name="name" required>
+
+    <label><b>Type</b></label>
+    <div class="form-type-group">
+      <input type="radio" name="type" value="doc" id="type-doc" checked>
+      <label for="type-doc">doc</label>
+      <input type="radio" name="type" value="sheet" id="type-sheet">
+      <label for="type-sheet">sheet</label>
+    </div>
+
+    <div class="form-buttons">
+      <button id="form-new-btn" type="submit" class="btn-primary">Create</button>
+      <button id="form-cancel-btn" type="button" class="btn-secondary">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="file-list-header">
+  <span class="file-list-title">File list</span>
+  <div class="user-area">
+    <div class="avatar">U</div>
+    <button id="logout-btn" class="btn-logout">Logout</button>
+  </div>
+</div>
+
+<div class="file-list-card">
+  <div class="file-list-toolbar">
+    <button id="delete-btn" class="btn-danger">Delete</button>
+  </div>
+  <div class="file-list-items">
+    <div onclick="checkBox(event)" class="file-item" data-value="1">
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="1"/>
+      <a href="#" class="file-name">Sample Doc.docx</a>
+      <span class="file-date">2024-01-15 10:30</span>
+      <div class="file-actions">
+        <a href="#" class="link-export">export</a>
+        <button class="btn-invite" onclick="showDialog(event)" fileId="1">Invite</button>
+      </div>
+    </div>
+    <div onclick="checkBox(event)" class="file-item" data-value="2">
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="2"/>
+      <a href="#" class="file-name">Report.xlsx</a>
+      <span class="file-date">2024-01-14 15:20</span>
+      <div class="file-actions">
+        <a href="#" class="link-export">export</a>
+        <button class="btn-invite" onclick="showDialog(event)" fileId="2">Invite</button>
+      </div>
+    </div>
+    <div onclick="checkBox(event)" class="file-item" data-value="3">
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="3"/>
+      <a href="#" class="file-name">Notes.docx</a>
+      <span class="file-date">2024-01-13 09:00</span>
+      <div class="file-actions">
+        <a href="#" class="link-export">export</a>
+        <button class="btn-invite" onclick="showDialog(event)" fileId="3">Invite</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="dialog">
+  <h3 style="margin: 0 0 16px 0; font-size: 18px;">Invite collaborators</h3>
+  <div id="dialog-msg">
+    <div class="hover-effect">
+      <span>Alice (You)</span>
+      <input type="checkbox" disabled>
+    </div>
+    <div class="hover-effect">
+      <span>Bob</span>
+      <input type="checkbox" class="inviteCheckbox">
+    </div>
+    <div class="hover-effect">
+      <span>Carol</span>
+      <input type="checkbox" class="inviteCheckbox">
+    </div>
+  </div>
+  <hr>
+  <div style="margin-bottom: 16px;">
+    <span style="margin-right: 10px;">Role</span>
+    <select id="select-role">
+      <option value="reader">Reader</option>
+      <option value="editor">Editor</option>
+    </select>
+  </div>
+  <div>
+    <button id="dialog-ok-btn" class="btn-primary">OK</button>
+    <button id="dialog-cancel-btn" class="btn-secondary">Cancel</button>
+  </div>
+</dialog>
+
+</div>
+
+<script type="text/javascript">
+  function checkBox(event) {
+    let row = event.currentTarget;
+    let checkbox = row ? row.querySelector('.fileCheckbox') : null;
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
+    }
+  }
+
+  document.getElementById("new-btn").addEventListener('click', function() {
+    document.getElementById('div-form').style.visibility = 'visible';
+  });
+
+  document.getElementById("import-btn").addEventListener('click', function() {
+    document.getElementById('file').click();
+  });
+
+  document.getElementById("form-cancel-btn").addEventListener('click', function() {
+    document.getElementById('div-form').style.display = 'none';
+  });
+
+  document.getElementById("form-new-btn").addEventListener('click', function() {
+    document.getElementById('form').action = '/file/new';
+  });
+
+  document.getElementById("form").addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Mockup: Form submit disabled');
+  });
+
+  function showDialog(event) {
+    event.stopPropagation();
+    document.getElementById('dialog').showModal();
+  }
+
+  document.getElementById("dialog-cancel-btn").addEventListener('click', function() {
+    document.getElementById('dialog').close();
+  });
+
+  document.getElementById("dialog-ok-btn").addEventListener('click', function() {
+    alert('Mockup: Invite disabled');
+    document.getElementById('dialog').close();
+  });
+
+  document.getElementById("delete-btn").addEventListener('click', function() {
+    alert('Mockup: Delete disabled');
+  });
+
+  document.getElementById("logout-btn").addEventListener('click', function() {
+    alert('Mockup: Logout disabled');
+  });
+</script>
+</body>
+</html>
