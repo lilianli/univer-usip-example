@@ -1,66 +1,80 @@
 <div id="list-page">
 
-<div>
-  <button id="new-btn">New File</button>
-  <button id="import-btn">Import File</button>
+<div class="header-actions">
+  <button id="new-btn" class="btn-primary">+ New File</button>
+  <button id="import-btn" class="btn-secondary">Import File</button>
 </div>
 
-<input type="file" id="file" style="visibility: hidden;"/>
+<input type="file" id="file" style="display: none;"/>
 
-<div id="div-form" style="visibility: hidden;">
+<div id="div-form" style="display: none;">
   <form id="form" action="" method="post" enctype="multipart/form-data">
     <label><b>Name</b></label>
-    <input type="text" placeholder="Enter Name" name="name" required>
-  
+    <input type="text" placeholder="Enter file name" name="name" required>
+
     <label><b>Type</b></label>
-    <input type="radio" name="type" value="doc" checked>
-    <label>doc</label>
-  
-    <input type="radio" name="type" value="sheet" checked>
-    <label>sheet</label>
-    
-    <div style="width: 100%;">
-      <button id="form-new-btn" type="submit" style="width: 30%;">new</button>
-      <button id="form-cancel-btn" style="width: 30%; background-color: darkgray;">cancel</button>
+    <div class="form-type-group">
+      <input type="radio" name="type" value="doc" id="type-doc" checked>
+      <label for="type-doc">doc</label>
+      <input type="radio" name="type" value="sheet" id="type-sheet">
+      <label for="type-sheet">sheet</label>
+    </div>
+
+    <div class="form-buttons">
+      <button id="form-new-btn" type="submit" class="btn-primary">Create</button>
+      <button id="form-cancel-btn" type="button" class="btn-secondary">Cancel</button>
     </div>
   </form>
 </div>
 
-<div>
-  <div style="padding: 10px 0;">
-    File list:
-    <div class="div-image" style="position: absolute; right: 150px; margin: -30px 0;">
-      <img src="/user/avatar/{{.UserId}}" style="width: 100%; height: auto;"/>
+<div class="file-list-header">
+  <span class="file-list-title">File list</span>
+  <div class="user-area">
+    <div class="avatar">
+      <img src="/user/avatar/{{.UserId}}" alt="avatar"/>
     </div>
-    <button id="logout-btn" style="width: 100px; height: 30px; background-color: chocolate; position: absolute; right: 20px; padding: 0px 20px; margin: 0;">Logout</button>
+    <button id="logout-btn" class="btn-logout">Logout</button>
   </div>
-  <hr/>
-  <button id="delete-btn" style="width: 100px;">Delete</button>
-  {{ range .Files }}
-  <p onclick="checkBox(event)" class="hover-effect">
-    <input type="checkbox" name="fileIds" class="fileCheckbox" value="{{.ID}}" style="width: 20px;"/>
-    {{ if (eq .UnitType 1) }}
-    <a href="{{$.DocHost}}/?unit={{.UnitId}}&type=1">{{.Name}}.docx</a>
-    {{ else if (eq .UnitType 2) }}
-    <a href="{{$.SheetHost}}/?unit={{.UnitId}}&type=2">{{.Name}}.xlsx</a>
-    {{ end }}
-    <label>{{.UpdatedAt}}</label>
-    <a href="/file/export?fileId={{.ID}}" style="margin: 0 10px;">export</a>
-    <button style="width: 70px; position: absolute; padding: 0px 20px; height: 20px; margin: 0;" onclick="showDialog(event)" fileId="{{.ID}}">Invite</button>
-  </p>
-  {{ end }}
 </div>
 
-<dialog id="dialog" style="width: 300px;">
+<div class="file-list-card">
+  <div class="file-list-toolbar">
+    <button id="delete-btn" class="btn-danger">Delete</button>
+  </div>
+  <div class="file-list-items">
+  {{ range .Files }}
+  <div onclick="checkBox(event)" class="file-item">
+    <input type="checkbox" name="fileIds" class="fileCheckbox" value="{{.ID}}"/>
+    {{ if (eq .UnitType 1) }}
+    <a href="{{$.DocHost}}/?unit={{.UnitId}}&type=1" class="file-name">{{.Name}}.docx</a>
+    {{ else if (eq .UnitType 2) }}
+    <a href="{{$.SheetHost}}/?unit={{.UnitId}}&type=2" class="file-name">{{.Name}}.xlsx</a>
+    {{ end }}
+    <span class="file-date">{{.UpdatedAt}}</span>
+    <div class="file-actions">
+      <a href="/file/export?fileId={{.ID}}" class="link-export">export</a>
+      <button class="btn-invite" onclick="showDialog(event)" fileId="{{.ID}}">Invite</button>
+    </div>
+  </div>
+  {{ end }}
+  </div>
+</div>
+
+<dialog id="dialog">
+  <h3 style="margin: 0 0 16px 0; font-size: 18px;">Invite collaborators</h3>
   <div id="dialog-msg"></div>
   <hr>
-  <span style="margin-right: 10px;">Role</span>
-  <select id="select-role" style="width: 100px; height: 20px;">
-    <option value="reader">Reader</option>
-    <option value="editor">Editor</option>
-  </select>
-  <button id="dialog-ok-btn">OK</button>
-  <button id="dialog-cancel-btn" style="background-color: darkgray;">Cancel</button>
+  <div style="margin-bottom: 16px;">
+    <span style="margin-right: 10px;">Role</span>
+    <select id="select-role">
+      <option value="reader">Reader</option>
+      <option value="editor">Editor</option>
+    </select>
+  </div>
+  <div>
+    <button id="dialog-ok-btn" class="btn-primary">OK</button>
+    <button id="dialog-cancel-btn" class="btn-secondary">Cancel</button>
+  </div>
 </dialog>
 
 </div>
@@ -71,14 +85,15 @@
 
 <script type="text/javascript">
   function checkBox(event) {
-    let target = event.target.querySelector('.fileCheckbox');
-    if (target) {
-      target.checked = !target.checked;
+    let row = event.currentTarget;
+    let checkbox = row ? row.querySelector('.fileCheckbox') : null;
+    if (checkbox) {
+      checkbox.checked = !checkbox.checked;
     }
   }
 
   document.getElementById("new-btn").addEventListener('click', function() {
-    document.getElementById('div-form').style.visibility = 'visible';
+    document.getElementById('div-form').style.display = 'block';
   });
 
   document.getElementById("import-btn").addEventListener('click', function() {
@@ -134,7 +149,7 @@
   });
 
   document.getElementById("form-cancel-btn").addEventListener('click', function() {
-    document.getElementById('div-form').style.visibility = 'hidden';
+    document.getElementById('div-form').style.display = 'none';
     document.getElementById('form').onsubmit = function() { return false; };
   });
 
@@ -172,7 +187,6 @@
   var inviteFileId = 0;
 
   function showPeople(data) {
-    console.log(data);
     let people = data.users;
     let dialogMsg = document.getElementById('dialog-msg');
     dialogMsg.innerHTML = '';
@@ -180,16 +194,21 @@
       let div = document.createElement('div');
       div.style.display = 'flex';
       div.style.justifyContent = 'space-between';
-      div.className= 'hover-effect';
+      div.style.alignItems = 'center';
+      div.style.padding = '10px 0';
+      div.style.cursor = 'pointer';
+      div.style.borderRadius = '6px';
+      div.onmouseover = function() { this.style.background = '#f9fafb'; };
+      div.onmouseout = function() { this.style.background = ''; };
       let span = document.createElement('span');
       span.innerText = person.nickname;
       let checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.value = person.user_id; 
+      checkbox.value = person.user_id;
       checkbox.className = 'inviteCheckbox';
       checkbox.checked = invite.includes(person.user_id);
       checkbox.onchange = function() {
-        if (checkbox.checked && checkBox.value !== currentUserId) {
+        if (checkbox.checked && checkbox.value !== currentUserId) {
           invite.push(checkbox.value);
         } else {
           invite = invite.filter(id => id !== checkbox.value);
@@ -200,10 +219,10 @@
         span.innerText += ' (You)';
       }
       div.onclick = function() {
-        checkbox.click();
+        if (!checkbox.disabled) checkbox.click();
       };
-      div.appendChild(checkbox);
       div.appendChild(span);
+      div.appendChild(checkbox);
       dialogMsg.appendChild(div);
     });
     if (pageStack.length>1 || data.next != 0) {
@@ -217,6 +236,7 @@
         prevSpan.style.color = 'blue';
         prevSpan.style.position = 'absolute';
         prevSpan.style.left = '30px';
+        prevSpan.style.cursor = 'pointer';
         prevSpan.onclick = function() {
           getPeople(page.prev).then(newData => {
             pageStack.pop();
@@ -231,6 +251,7 @@
         nextSpan.style.color = 'blue';
         nextSpan.style.position = 'absolute';
         nextSpan.style.right = '30px';
+        nextSpan.style.cursor = 'pointer';
         nextSpan.onclick = function() {
           getPeople(data.next).then(newData => {
             pageStack.push({prev: data.next});
@@ -245,6 +266,7 @@
   }
 
   function showDialog(event) {
+    event.stopPropagation();
     inviteFileId = event.target.getAttribute('fileId');
     invite = [];
     pageStack = [];
@@ -257,7 +279,7 @@
   document.getElementById("dialog-cancel-btn").addEventListener('click', function() {
     document.getElementById('dialog').close();
   });
-  
+
   document.getElementById("dialog-ok-btn").addEventListener('click', function() {
     fetch('/file/join', {
       method: 'POST',
@@ -279,23 +301,3 @@
     });
   });
 </script>
-
-<style>
-  .hover-effect {
-    transition: background-color 0.3s;
-  }
-
-  .hover-effect:hover {
-    background-color: lightgrey;
-  }
-
-  .div-image {
-    width: 40px; 
-    height: 40px;
-    border: 2px solid #3498db; 
-    border-radius: 50%; 
-    overflow: hidden; 
-    display: flex;
-    padding: 0;
-  }
-</style>

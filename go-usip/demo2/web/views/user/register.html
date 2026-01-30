@@ -1,14 +1,18 @@
-<form action="/user/register" method="POST">
-    <div class="container">
-        <label><b>Nickname</b></label>
-        <input type="text" placeholder="Enter Nickname" name="nickname" required>
+<div class="register-page">
+    <div class="register-card">
+        <h1>Register</h1>
+        <form action="/user/register" method="POST">
+            <label for="nickname">Nickname</label>
+            <input type="text" id="nickname" placeholder="Enter Nickname" name="nickname" required>
 
-        <label><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="username" required>
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter Username" name="username" required>
 
-        <label><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter Password" name="password" required>
 
-        <button type="submit">Register</button>
+            <button type="submit" class="btn-primary">Register</button>
+            <a href="/user/login" class="back-link">Back to login</a>
+        </form>
     </div>
-</form>
+</div>
