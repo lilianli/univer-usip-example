@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"time"
 
 	"go-usip/datasource"
@@ -34,8 +35,10 @@ func main() {
 	tmpl := iris.HTML("./web/views", ".html").
 		Layout("shared/layout.html").
 		Reload(true).
-		AddFunc("formatDateTime", func(t time.Time) string {
-			return t.Format("2006-01-02 15:04")
+		Funcs(template.FuncMap{
+			"formatDateTime": func(t time.Time) string {
+				return t.Format("2006-01-02 15:04")
+			},
 		})
 	app.RegisterView(tmpl)
 
