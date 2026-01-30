@@ -33,7 +33,10 @@ func main() {
 	// Load the template files.
 	tmpl := iris.HTML("./web/views", ".html").
 		Layout("shared/layout.html").
-		Reload(true)
+		Reload(true).
+		AddFunc("formatDateTime", func(t time.Time) string {
+			return t.Format("2006-01-02 15:04")
+		})
 	app.RegisterView(tmpl)
 
 	app.HandleDir("/public", iris.Dir("./web/public"))

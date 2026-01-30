@@ -385,9 +385,10 @@
   function checkBox(event) {
     let row = event.currentTarget;
     let checkbox = row ? row.querySelector('.fileCheckbox') : null;
-    if (checkbox) {
-      checkbox.checked = !checkbox.checked;
-    }
+    if (!checkbox) return;
+    // Skip when clicking directly on checkbox - let native behavior handle it
+    if (event.target === checkbox) return;
+    checkbox.checked = !checkbox.checked;
   }
 
   document.getElementById("new-btn").addEventListener('click', function() {
