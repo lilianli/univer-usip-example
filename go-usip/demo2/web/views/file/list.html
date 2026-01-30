@@ -220,7 +220,9 @@
         checkbox.disabled = true;
         span.innerText += ' (You)';
       }
-      div.onclick = function() {
+      div.onclick = function(event) {
+        // Skip when clicking directly on checkbox - let native behavior handle it
+        if (event.target === checkbox) return;
         if (!checkbox.disabled) checkbox.click();
       };
       div.appendChild(span);
