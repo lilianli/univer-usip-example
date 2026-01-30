@@ -1,7 +1,7 @@
 /* Bordered form */
-form {
+/* form {
     border: 3px solid #f1f1f1;
-}
+} */
 
 /* Full-width inputs */
 input[type=text], input[type=password] {
@@ -21,7 +21,7 @@ button {
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
+    /* width: 100%; */
 }
 
 /* Add a hover effect for buttons */

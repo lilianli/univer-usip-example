@@ -11,13 +11,14 @@
   <form id="form" action="" method="post" enctype="multipart/form-data">
     <label><b>Name</b></label>
     <input type="text" placeholder="Enter file name" name="name" required>
-
-    <label><b>Type</b></label>
-    <div class="form-type-group">
-      <input type="radio" name="type" value="doc" id="type-doc" checked>
-      <label for="type-doc">doc</label>
-      <input type="radio" name="type" value="sheet" id="type-sheet">
-      <label for="type-sheet">sheet</label>
+    <div style="display: none;">
+      <label><b>Type</b></label>
+      <div class="form-type-group">
+        <!-- <input type="radio" name="type" value="doc" id="type-doc" checked>
+        <label for="type-doc">doc</label> -->
+        <input type="radio" name="type" value="sheet" id="type-sheet" checked>
+        <label for="type-sheet">sheet</label>
+      </div>
     </div>
 
     <div class="form-buttons">
