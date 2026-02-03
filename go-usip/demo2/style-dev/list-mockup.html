@@ -165,13 +165,22 @@
             align-items: center;
             gap: 12px;
         }
-        .file-item .link-export {
-            font-size: 13px;
-            color: #6b7280;
+        .file-item .btn-export {
+            display: inline-block;
+            padding: 6px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            background: white;
+            color: #374151;
             text-decoration: none;
+            transition: all 0.2s ease;
         }
-        .file-item .link-export:hover {
-            color: #2563eb;
+        .file-item .btn-export:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
         }
         .btn-invite {
             padding: 6px 14px;
@@ -320,29 +329,29 @@
   </div>
   <div class="file-list-items">
     <div onclick="checkBox(event)" class="file-item" data-value="1">
-      <input type="checkbox" name="fileIds" class="fileCheckbox" value="1"/>
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="1" onclick="event.stopPropagation()"/>
       <a href="#" class="file-name">Sample Doc.docx</a>
       <span class="file-date">2024-01-15 10:30</span>
       <div class="file-actions">
-        <a href="#" class="link-export">export</a>
+        <a href="#" class="btn-export">Export</a>
         <button class="btn-invite" onclick="showDialog(event)" fileId="1">Invite</button>
       </div>
     </div>
     <div onclick="checkBox(event)" class="file-item" data-value="2">
-      <input type="checkbox" name="fileIds" class="fileCheckbox" value="2"/>
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="2" onclick="event.stopPropagation()"/>
       <a href="#" class="file-name">Report.xlsx</a>
       <span class="file-date">2024-01-14 15:20</span>
       <div class="file-actions">
-        <a href="#" class="link-export">export</a>
+        <a href="#" class="btn-export">Export</a>
         <button class="btn-invite" onclick="showDialog(event)" fileId="2">Invite</button>
       </div>
     </div>
     <div onclick="checkBox(event)" class="file-item" data-value="3">
-      <input type="checkbox" name="fileIds" class="fileCheckbox" value="3"/>
+      <input type="checkbox" name="fileIds" class="fileCheckbox" value="3" onclick="event.stopPropagation()"/>
       <a href="#" class="file-name">Notes.docx</a>
       <span class="file-date">2024-01-13 09:00</span>
       <div class="file-actions">
-        <a href="#" class="link-export">export</a>
+        <a href="#" class="btn-export">Export</a>
         <button class="btn-invite" onclick="showDialog(event)" fileId="3">Invite</button>
       </div>
     </div>
@@ -352,17 +361,17 @@
 <dialog id="dialog">
   <h3 style="margin: 0 0 16px 0; font-size: 18px;">Invite collaborators</h3>
   <div id="dialog-msg">
-    <div class="hover-effect">
+    <div class="hover-effect" onclick="var cb=this.querySelector('input[type=checkbox]'); if(!cb.disabled) cb.click();">
       <span>Alice (You)</span>
-      <input type="checkbox" disabled>
+      <input type="checkbox" disabled onclick="event.stopPropagation()">
     </div>
-    <div class="hover-effect">
+    <div class="hover-effect" onclick="var cb=this.querySelector('input[type=checkbox]'); if(!cb.disabled) cb.click();">
       <span>Bob</span>
-      <input type="checkbox" class="inviteCheckbox">
+      <input type="checkbox" class="inviteCheckbox" onclick="event.stopPropagation()">
     </div>
-    <div class="hover-effect">
+    <div class="hover-effect" onclick="var cb=this.querySelector('input[type=checkbox]'); if(!cb.disabled) cb.click();">
       <span>Carol</span>
-      <input type="checkbox" class="inviteCheckbox">
+      <input type="checkbox" class="inviteCheckbox" onclick="event.stopPropagation()">
     </div>
   </div>
   <hr>
@@ -386,8 +395,6 @@
     let row = event.currentTarget;
     let checkbox = row ? row.querySelector('.fileCheckbox') : null;
     if (!checkbox) return;
-    // Skip when clicking directly on checkbox - let native behavior handle it
-    if (event.target === checkbox) return;
     checkbox.checked = !checkbox.checked;
   }
 
